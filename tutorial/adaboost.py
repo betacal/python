@@ -25,7 +25,7 @@ class AdaBoostClassifier(BaseEstimator):
             estimator.fit(X, y_changed, sample_weights)
             self.estimators.append(estimator)
             predictions = estimator.predict(X)
-            incorrect = (predictions != y).astype(float)
+            incorrect = (predictions != y_changed).astype(float)
             error = (sample_weights * incorrect).sum()
             if error > 0:
                 self.alphas[iboost] = 0.5 * np.log((1-error) / error)
