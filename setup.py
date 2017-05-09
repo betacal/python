@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(name='betacal',
-      version='0.2.4',
+      version='0.2.5',
       description='Beta calibration',
-      url='https://github.com/betacal',
+      url='https://github.com/betacal/python',
       author='tmfilho',
       author_email='tmfilho@gmail.com',
       license='MIT',

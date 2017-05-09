@@ -21,20 +21,20 @@ def _beta_calibration(df, y, sample_weight=None):
     x[:, 1] *= -1
 
     lr = LogisticRegression(C=99999999999)
-    lr.fit(x, y)
+    lr.fit(x, y, sample_weight)
     coefs = lr.coef_[0]
 
     if coefs[0] < 0:
         x = x[:, 1].reshape(-1, 1)
         lr = LogisticRegression(C=99999999999)
-        lr.fit(x, y)
+        lr.fit(x, y, sample_weight)
         coefs = lr.coef_[0]
         a = 0
         b = coefs[0]
     elif coefs[1] < 0:
         x = x[:, 0].reshape(-1, 1)
         lr = LogisticRegression(C=99999999999)
-        lr.fit(x, y)
+        lr.fit(x, y, sample_weight)
         coefs = lr.coef_[0]
         a = coefs[0]
         b = 0
@@ -43,7 +43,7 @@ def _beta_calibration(df, y, sample_weight=None):
         b = coefs[1]
     inter = lr.intercept_[0]
 
-    m = minimize_scalar(lambda(mh): np.abs(b*np.log(1.-mh)-a*np.log(mh)-inter),
+    m = minimize_scalar(lambda mh: np.abs(b*np.log(1.-mh)-a*np.log(mh)-inter),
                         bounds=[0, 1], method='Bounded').x
     map = [a, b, m]
     return map, lr
@@ -128,7 +128,7 @@ def _beta_am_calibration(df, y, sample_weight=None):
     x = np.log(df / (1. - df))
 
     lr = LogisticRegression(C=99999999999)
-    lr.fit(x, y)
+    lr.fit(x, y, sample_weight)
     coefs = lr.coef_[0]
     inter = lr.intercept_[0]
     a = coefs[0]
@@ -211,7 +211,7 @@ def _beta_ab_calibration(df, y, sample_weight=None):
     x = np.log(2 * x)
 
     lr = LogisticRegression(fit_intercept=False, C=99999999999)
-    lr.fit(x, y)
+    lr.fit(x, y, sample_weight)
     coefs = lr.coef_[0]
     a = coefs[0]
     b = -coefs[1]
