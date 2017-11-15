@@ -13,7 +13,8 @@ def _beta_calibration(df, y, sample_weight=None):
     warnings.filterwarnings("ignore")
 
     df = column_or_1d(df).reshape(-1, 1)
-    df = np.clip(df, 1e-16, 1-1e-16)
+    eps = np.finfo(df.dtype).eps
+    df = np.clip(df, eps, 1-eps)
     y = column_or_1d(y)
 
     x = np.hstack((df, 1. - df))
@@ -105,7 +106,8 @@ class _BetaCal(BaseEstimator, RegressorMixin):
             The predicted values.
         """
         df = column_or_1d(S).reshape(-1, 1)
-        df = np.clip(df, 1e-16, 1-1e-16)
+        eps = np.finfo(df.dtype).eps
+        df = np.clip(df, eps, 1-eps)
 
         x = np.hstack((df, 1. - df))
         x = np.log(x)
@@ -122,7 +124,8 @@ def _beta_am_calibration(df, y, sample_weight=None):
     warnings.filterwarnings("ignore")
 
     df = column_or_1d(df).reshape(-1, 1)
-    df = np.clip(df, 1e-16, 1-1e-16)
+    eps = np.finfo(df.dtype).eps
+    df = np.clip(df, eps, 1-eps)
     y = column_or_1d(y)
 
     x = np.log(df / (1. - df))
@@ -194,7 +197,8 @@ class _BetaAMCal(BaseEstimator, RegressorMixin):
             The predicted values.
         """
         df = column_or_1d(S).reshape(-1, 1)
-        df = np.clip(df, 1e-16, 1-1e-16)
+        eps = np.finfo(df.dtype).eps
+        df = np.clip(df, eps, 1-eps)
 
         x = np.log(df / (1. - df))
         return self.lr_.predict_proba(x)[:, 1]
@@ -204,7 +208,8 @@ def _beta_ab_calibration(df, y, sample_weight=None):
     warnings.filterwarnings("ignore")
 
     df = column_or_1d(df).reshape(-1, 1)
-    df = np.clip(df, 1e-16, 1-1e-16)
+    eps = np.finfo(df.dtype).eps
+    df = np.clip(df, eps, 1-eps)
     y = column_or_1d(y)
 
     x = np.hstack((df, 1. - df))
@@ -276,7 +281,8 @@ class _BetaABCal(BaseEstimator, RegressorMixin):
             The predicted values.
         """
         df = column_or_1d(S).reshape(-1, 1)
-        df = np.clip(df, 1e-16, 1-1e-16)
+        eps = np.finfo(df.dtype).eps
+        df = np.clip(df, eps, 1-eps)
 
         x = np.hstack((df, 1. - df))
         x = np.log(2 * x)
