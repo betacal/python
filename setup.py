@@ -1,7 +1,13 @@
 from setuptools import setup
+from distutils.util import convert_path
+
+main_ns = {}
+ver_path = convert_path('hyperstream/version.py')
+with open(ver_path) as ver_file:
+    exec(ver_file.read(), main_ns)
 
 setup(name='betacal',
-      version='0.2.5',
+      version=main_ns['__version__'],
       description='Beta calibration',
       url='https://github.com/betacal/python',
       author='tmfilho',

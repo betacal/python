@@ -1,5 +1,6 @@
 from .beta_calibration import _BetaCal, _BetaAMCal, _BetaABCal
 from sklearn.base import BaseEstimator, RegressorMixin
+from .version import __version__
 
 
 class BetaCalibration(BaseEstimator, RegressorMixin):
