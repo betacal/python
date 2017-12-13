@@ -14,6 +14,22 @@ This package provides a BetaCalibration class which allows the user to fit any o
  - Alternatively, download from here, cd to the folder and use "pip install ."
  - Once installed, import the package using "import betacal" 
 
+## Unittest
+
+Create a virtual environment with the necessary dependencies
+
+```
+virtualenv venv
+. ./venv/bin/activate
+pip install -r requirements.txt
+```
+
+and then run the script runtest.sh
+
+```
+bash runtest.sh
+```
+
 ## License
 
 MIT
