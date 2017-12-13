@@ -297,7 +297,7 @@ def _beta_a_calibration(df, y, sample_weight=None):
     df = np.clip(df, eps, 1-eps)
     y = column_or_1d(y)
 
-    x = np.log(2 * df / (1. - df))
+    x = np.log(2 * df)
 
     lr = LogisticRegression(fit_intercept=False, C=99999999999)
     lr.fit(x, y, sample_weight)
@@ -368,5 +368,5 @@ class _BetaACal(BaseEstimator, RegressorMixin):
         eps = np.finfo(df.dtype).eps
         df = np.clip(df, eps, 1-eps)
 
-        x = np.log(2 * df / (1. - df))
+        x = np.log(2 * df)
         return self.lr_.predict_proba(x)[:, 1]
