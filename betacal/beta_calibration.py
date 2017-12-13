@@ -297,8 +297,7 @@ def _beta_a_calibration(df, y, sample_weight=None):
     df = np.clip(df, eps, 1-eps)
     y = column_or_1d(y)
 
-    x = np.hstack((df, 1. - df))
-    x = np.log(2 * x)
+    x = np.log(2 * df / (1. - df))
 
     lr = LogisticRegression(fit_intercept=False, C=99999999999)
     lr.fit(x, y, sample_weight)
@@ -320,7 +319,7 @@ class _BetaACal(BaseEstimator, RegressorMixin):
     ----------
     map_ : array-like, shape (3,)
         Array containing the coefficients of the model (a and b) and the
-        midpoint m. Takes the form map_ = [a, b, m], where a = b
+        midpoint m. Takes the form map_ = [a, b, m], where a = b and m = 0.5
 
     lr_ : sklearn.linear_model.LogisticRegression
         Internal logistic regression used to train the model.
@@ -369,6 +368,5 @@ class _BetaACal(BaseEstimator, RegressorMixin):
         eps = np.finfo(df.dtype).eps
         df = np.clip(df, eps, 1-eps)
 
-        x = np.hstack((df, 1. - df))
-        x = np.log(2 * x)
+        x = np.log(2 * df / (1. - df))
         return self.lr_.predict_proba(x)[:, 1]

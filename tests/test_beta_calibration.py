@@ -45,6 +45,14 @@ pred_ab = [3.75428062e-01, 8.04595129e-01, 7.14377353e-01, 5.51674002e-01,
            4.37833060e-01, 3.22713897e-01, 8.06357283e-01, 8.11726933e-01,
            3.18446552e-01, 2.00201781e-03, 8.05428643e-01, 9.89259183e-02]
 
+pred_a = [0.56389137, 0.79006733, 0.70049135, 0.62359278, 0.35098528,
+          0.3584633 , 0.52130311, 0.79485728, 0.89660531, 0.74225352,
+          0.63977496, 0.82147723, 0.53153368, 0.76987029, 0.53483339,
+          0.74882532, 0.44701625, 0.40736991, 0.09520112, 0.20817596,
+          0.61424562, 0.48940509, 0.69570236, 0.44139442, 0.57747745,
+          0.6769725 , 0.39969659, 0.8374827 , 0.30305695, 0.62748095,
+          0.68860253, 0.25517098, 0.58415276, 0.54671516, 0.79345562,
+          0.88839626, 0.54530507, 0.27431766, 0.89950019, 0.45350241]
 
 def generate_scores_and_y(accuracy=0.8, prior=0.4, n_samples=40, seed=42):
     np.random.seed(seed)
@@ -64,6 +72,7 @@ class BetaCalibrationTests(unittest.TestCase):
         pred = bc.predict(s)
 
         np.testing.assert_allclose(pred, pred_abm)
+        assert(len(bc.calibrator_.lr_.coef_[0]) == 2)
 
     def test_betacal_am(self):
         bc = BetaCalibration(parameters="am")
@@ -73,6 +82,7 @@ class BetaCalibrationTests(unittest.TestCase):
 
         # With smaller tolerance does not pass the tests
         np.testing.assert_allclose(pred, pred_am, rtol=1e-5)
+        assert(len(bc.calibrator_.lr_.coef_[0]) == 1)
 
     def test_betacal_ab(self):
         bc = BetaCalibration(parameters="ab")
@@ -81,3 +91,13 @@ class BetaCalibrationTests(unittest.TestCase):
         pred = bc.predict(s)
 
         np.testing.assert_allclose(pred, pred_ab)
+        assert(len(bc.calibrator_.lr_.coef_[0]) == 2)
+
+    def test_betacal_a(self):
+        bc = BetaCalibration(parameters="a")
+        bc.fit(s, y)
+
+        pred = bc.predict(s)
+
+        np.testing.assert_allclose(pred, pred_a)
+        assert(len(bc.calibrator_.lr_.coef_[0]) == 1)
