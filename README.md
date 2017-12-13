@@ -24,10 +24,10 @@ virtualenv venv
 pip install -r requirements.txt
 ```
 
-and then run the script runtest.sh
+and then run the script runtests.sh
 
 ```
-bash runtest.sh
+bash runtests.sh
 ```
 
 ## License
