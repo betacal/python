@@ -1,4 +1,4 @@
-from .beta_calibration import _BetaCal, _BetaAMCal, _BetaABCal
+from .beta_calibration import _BetaCal, _BetaAMCal, _BetaABCal, _BetaACal
 from sklearn.base import BaseEstimator, RegressorMixin
 from .version import __version__
 
@@ -27,6 +27,8 @@ class BetaCalibration(BaseEstimator, RegressorMixin):
             self.calibrator_ = _BetaAMCal()
         elif parameters == "ab":
             self.calibrator_ = _BetaABCal()
+        elif parameters == "a":
+            self.calibrator_ = _BetaACal()
         else:
             raise ValueError('Unknown parameters', parameters)
 

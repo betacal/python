@@ -287,3 +287,88 @@ class _BetaABCal(BaseEstimator, RegressorMixin):
         x = np.hstack((df, 1. - df))
         x = np.log(2 * x)
         return self.lr_.predict_proba(x)[:, 1]
+
+
+def _beta_a_calibration(df, y, sample_weight=None):
+    warnings.filterwarnings("ignore")
+
+    df = column_or_1d(df).reshape(-1, 1)
+    eps = np.finfo(df.dtype).eps
+    df = np.clip(df, eps, 1-eps)
+    y = column_or_1d(y)
+
+    x = np.hstack((df, 1. - df))
+    x = np.log(2 * x)
+
+    lr = LogisticRegression(fit_intercept=False, C=99999999999)
+    lr.fit(x, y, sample_weight)
+    coefs = lr.coef_[0]
+    a = coefs[0]
+    b = a
+    m = 0.5
+    map = [a, b, m]
+    return map, lr
+
+
+class _BetaACal(BaseEstimator, RegressorMixin):
+    """Beta regression model with one parameter (a = b, fixing m = 0.5)
+    introduced in Kull, M., Silva Filho, T.M. and Flach, P. Beta calibration:
+    a well-founded and easily implemented improvement on logistic calibration
+    for binary classifiers. AISTATS 2017.
+
+    Attributes
+    ----------
+    map_ : array-like, shape (3,)
+        Array containing the coefficients of the model (a and b) and the
+        midpoint m. Takes the form map_ = [a, b, m], where a = b
+
+    lr_ : sklearn.linear_model.LogisticRegression
+        Internal logistic regression used to train the model.
+    """
+    def fit(self, X, y, sample_weight=None):
+        """Fit the model using X, y as training data.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples,)
+            Training data.
+
+        y : array-like, shape (n_samples,)
+            Training target.
+
+        sample_weight : array-like, shape = [n_samples] or None
+            Sample weights. If None, then samples are equally weighted.
+
+        Returns
+        -------
+        self : object
+            Returns an instance of self.
+        """
+        X = column_or_1d(X)
+        y = column_or_1d(y)
+        X, y = indexable(X, y)
+
+        self.map_, self.lr_ = _beta_a_calibration(X, y, sample_weight)
+
+        return self
+
+    def predict(self, S):
+        """Predict new values.
+
+        Parameters
+        ----------
+        S : array-like, shape (n_samples,)
+            Data to predict from.
+
+        Returns
+        -------
+        S_ : array, shape (n_samples,)
+            The predicted values.
+        """
+        df = column_or_1d(S).reshape(-1, 1)
+        eps = np.finfo(df.dtype).eps
+        df = np.clip(df, eps, 1-eps)
+
+        x = np.hstack((df, 1. - df))
+        x = np.log(2 * x)
+        return self.lr_.predict_proba(x)[:, 1]
