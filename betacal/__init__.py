@@ -21,6 +21,7 @@ class BetaCalibration(BaseEstimator, RegressorMixin):
         Internal calibrator object. The type depends on the value of parameters.
     """
     def __init__(self, parameters="abm"):
+        self.parameters = parameters
         if parameters == "abm":
             self.calibrator_ = _BetaCal()
         elif parameters == "am":
@@ -69,3 +70,5 @@ class BetaCalibration(BaseEstimator, RegressorMixin):
             The predicted values.
         """
         return self.calibrator_.predict(S)
+
+    predict_proba = predict
