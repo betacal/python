@@ -4,9 +4,9 @@ from .version import __version__
 
 
 class BetaCalibration(BaseEstimator, RegressorMixin):
-    """Wrapper class for the three Beta regression models introduced in 
-    Kull, M., Silva Filho, T.M. and Flach, P. Beta calibration: a well-founded 
-    and easily implemented improvement on logistic calibration for binary  
+    """Wrapper class for the three Beta regression models introduced in
+    Kull, M., Silva Filho, T.M. and Flach, P. Beta calibration: a well-founded
+    and easily implemented improvement on logistic calibration for binary
     classifiers. AISTATS 2017.
 
     Parameters
@@ -22,16 +22,6 @@ class BetaCalibration(BaseEstimator, RegressorMixin):
     """
     def __init__(self, parameters="abm"):
         self.parameters = parameters
-        if parameters == "abm":
-            self.calibrator_ = _BetaCal()
-        elif parameters == "am":
-            self.calibrator_ = _BetaAMCal()
-        elif parameters == "ab":
-            self.calibrator_ = _BetaABCal()
-        elif parameters == "a":
-            self.calibrator_ = _BetaACal()
-        else:
-            raise ValueError('Unknown parameters', parameters)
 
     def fit(self, X, y, sample_weight=None):
         """Fit the model using X, y as training data.
@@ -53,6 +43,17 @@ class BetaCalibration(BaseEstimator, RegressorMixin):
         self : object
             Returns an instance of self.
         """
+        if self.parameters == "abm":
+            self.calibrator_ = _BetaCal()
+        elif self.parameters == "am":
+            self.calibrator_ = _BetaAMCal()
+        elif self.parameters == "ab":
+            self.calibrator_ = _BetaABCal()
+        elif self.parameters == "a":
+            self.calibrator_ = _BetaACal()
+        else:
+            raise ValueError('Unknown parameters', self.parameters)
+
         self.calibrator_.fit(X, y, sample_weight)
         return self
 
