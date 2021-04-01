@@ -31,6 +31,7 @@ class BetaCalibration(BaseEstimator, RegressorMixin):
             self.calibrator_ = _BetaACal()
         else:
             raise ValueError('Unknown parameters', parameters)
+        self.parameters = parameters
 
     def fit(self, X, y, sample_weight=None):
         """Fit the model using X, y as training data.
