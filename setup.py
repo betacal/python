@@ -15,7 +15,6 @@ setup(
     name='betacal',
     version=main_ns['__version__'],
     description='Beta calibration',
-    url='https://github.com/betacal/python',
     author='Telmo de Menezes e Silva Filho and Miquel Perello Nieto',
     author_email='tmfilho@gmail.com',
     url = 'https://betacal.github.io/',
