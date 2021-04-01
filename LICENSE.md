@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2016-2021 Telmo de Menezes e Silva Filho and contributors
+Copyright (c) 2016-2021 Meelis Kull, Telmo de Menezes e Silva Filho, Peter Flach and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
