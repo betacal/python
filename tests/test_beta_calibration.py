@@ -12,49 +12,7 @@ s = [0.43155171, 0.81164906, 0.66544901, 0.53177918, 0.15549116, 0.16259166,
      0.40183604, 0.09328503, 0.9462795 , 0.26967112]
 
 y = [0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
-     0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0 , 0, 1, 0]
-
-pred_abm = [2.18699178e-01, 7.40477707e-01, 5.51170734e-01, 3.56427311e-01,
-            1.29492454e-02, 1.47126247e-02, 1.41868465e-01, 7.48794431e-01,
-            8.88079905e-01, 6.47156133e-01, 3.97435321e-01, 7.91753376e-01,
-            1.58409698e-01, 7.03352892e-01, 1.64007307e-01, 6.61091536e-01,
-            5.67727420e-02, 3.21331846e-02, 1.08002409e-05, 6.36014161e-04,
-            3.33201503e-01, 9.81070940e-02, 5.39458474e-01, 5.25482565e-02,
-            2.47404830e-01, 4.92657068e-01, 2.85953061e-02, 8.15086424e-01,
-            5.38793833e-03, 3.66202680e-01, 5.21887509e-01, 1.98773699e-03,
-            2.62167505e-01, 1.85214592e-01, 7.46379804e-01, 8.78967901e-01,
-            1.82612486e-01, 3.01167983e-03, 8.91231598e-01, 6.19845435e-02]
-
-pred_am = [0.20860378, 0.74055384, 0.49703972, 0.31416944, 0.03636798,
-           0.03900904, 0.15235749, 0.75283543, 0.94834425, 0.61114363,
-           0.34851092, 0.81715075, 0.16455455, 0.68703353, 0.16865886,
-           0.62933562, 0.08465638, 0.06052981, 0.00097979, 0.00750064,
-           0.29544812, 0.11911255, 0.4843779 , 0.08080395, 0.22975296,
-           0.43621205, 0.05661144, 0.85190681, 0.02268127, 0.32219872,
-           0.46585112, 0.01345395, 0.24075026, 0.18415111, 0.74926071,
-           0.938153  , 0.18225307, 0.01669947, 0.95169109, 0.08929536]
-
-pred_ab = [3.75428062e-01, 8.04595129e-01, 7.14377353e-01, 5.51674002e-01,
-           1.37926790e-02, 1.62854468e-02, 2.48516279e-01, 8.07055461e-01,
-           8.07275003e-01, 7.67752302e-01, 5.93152430e-01, 8.16958635e-01,
-           2.77596070e-01, 7.91848453e-01, 2.87227447e-01, 7.74230008e-01,
-           8.90865074e-02, 4.42480643e-02, 9.39870994e-07, 2.46242682e-04,
-           5.26141963e-01, 1.67747892e-01, 7.06788146e-01, 8.11705006e-02,
-           4.17387527e-01, 6.73939708e-01, 3.82009928e-02, 8.19854896e-01,
-           4.34716231e-03, 5.61967344e-01, 6.94937650e-01, 1.14681825e-03,
-           4.37833060e-01, 3.22713897e-01, 8.06357283e-01, 8.11726933e-01,
-           3.18446552e-01, 2.00201781e-03, 8.05428643e-01, 9.89259183e-02]
-
-pred_a = [3.87442638e-01, 8.18673874e-01, 7.08772410e-01, 5.47786266e-01,
-          2.57239765e-02, 2.94452826e-02, 2.72714042e-01, 8.22678513e-01,
-          8.78265398e-01, 7.69132951e-01, 5.86979521e-01, 8.42266316e-01,
-          2.99287493e-01, 7.99981455e-01, 3.08034132e-01, 7.77074901e-01,
-          1.17287506e-01, 6.63695563e-02, 1.09063736e-05, 9.78882399e-04,
-          5.24052932e-01, 1.96847548e-01, 7.00674898e-01, 1.08724928e-01,
-          4.25122924e-01, 6.66532818e-01, 5.88956285e-02, 8.52090090e-01,
-          1.00590541e-02, 5.57432843e-01, 6.88199504e-01, 3.40742525e-03,
-          4.43538315e-01, 3.40092191e-01, 8.21522780e-01, 8.75449445e-01,
-          3.36248384e-01, 5.35679385e-03, 8.79203339e-01, 1.27745124e-01]
+     0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0]
 
 
 def generate_scores_and_y(accuracy=0.8, prior=0.4, n_samples=40, seed=42):
@@ -66,6 +24,12 @@ def generate_scores_and_y(accuracy=0.8, prior=0.4, n_samples=40, seed=42):
     s = (np.random.rand(len(y))+predicted_class)/2
     return s, y
 
+def map_predictions(s, a, b, m):
+    c = b * np.log(1. - m) - a * np.log(m)
+    p = np.array(s)
+    beta = 1 / (1 + 1 / (np.exp(c) * p ** a / (1 - p) ** b))
+    return beta
+
 
 class BetaCalibrationTests(unittest.TestCase):
     def test_betacal(self):
@@ -74,7 +38,11 @@ class BetaCalibrationTests(unittest.TestCase):
 
         pred = bc.predict(s)
 
-        np.testing.assert_allclose(pred, pred_abm)
+        beta_map = bc.calibrator_.map_
+
+        pred_abm = map_predictions(s, *beta_map)
+
+        np.testing.assert_allclose(pred, pred_abm, rtol=1e-5, atol=1e-5)
         assert(len(bc.calibrator_.lr_.coef_[0]) == 2)
 
     def test_betacal_am(self):
@@ -83,8 +51,11 @@ class BetaCalibrationTests(unittest.TestCase):
 
         pred = bc.predict(s)
 
-        # With smaller tolerance does not pass the tests
-        np.testing.assert_allclose(pred, pred_am, rtol=1e-5)
+        beta_map = bc.calibrator_.map_
+
+        pred_am = map_predictions(s, *beta_map)
+
+        np.testing.assert_allclose(pred, pred_am, rtol=1e-5, atol=1e-5)
         assert(len(bc.calibrator_.lr_.coef_[0]) == 1)
 
     def test_betacal_ab(self):
@@ -93,7 +64,11 @@ class BetaCalibrationTests(unittest.TestCase):
 
         pred = bc.predict(s)
 
-        np.testing.assert_allclose(pred, pred_ab)
+        beta_map = bc.calibrator_.map_
+
+        pred_ab = map_predictions(s, *beta_map)
+
+        np.testing.assert_allclose(pred, pred_ab, rtol=1e-5, atol=1e-5)
         assert(len(bc.calibrator_.lr_.coef_[0]) == 2)
 
     def test_betacal_a(self):
@@ -102,5 +77,9 @@ class BetaCalibrationTests(unittest.TestCase):
 
         pred = bc.predict(s)
 
-        np.testing.assert_allclose(pred, pred_a)
+        beta_map = bc.calibrator_.map_
+
+        pred_a = map_predictions(s, *beta_map)
+        
+        np.testing.assert_allclose(pred, pred_a, rtol=1e-5, atol=1e-5)
         assert(len(bc.calibrator_.lr_.coef_[0]) == 1)
