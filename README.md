@@ -1,6 +1,6 @@
 # Beta calibration - Python package
 
-This package provides a BetaCalibration class which allows the user to fit any of our three proposed beta calibration models.
+This package provides a BetaCalibration class which allows the user to fit any of our three proposed beta calibration models. For the paper and tutorials, check [https://betacal.github.io/](https://betacal.github.io/).
 
 ## Dependencies
 
@@ -11,7 +11,7 @@ This package provides a BetaCalibration class which allows the user to fit any o
 ## Usage
 
  - Install from pip using "pip install betacal"
- - Alternatively, download from here, cd to the folder and use "pip install ."
+ - Alternatively, download from the repository, cd to the folder and use "pip install ."
  - Once installed, import the package using "import betacal" 
 
 ## Unittest
