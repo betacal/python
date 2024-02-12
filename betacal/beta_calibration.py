@@ -30,7 +30,7 @@ def _beta_calibration(df, y, sample_weight=None):
         lr = LogisticRegression(C=99999999999)
         lr.fit(x, y, sample_weight)
         coefs = lr.coef_[0]
-        a = 0
+        a = None
         b = coefs[0]
     elif coefs[1] < 0:
         x = x[:, 0].reshape(-1, 1)
@@ -38,7 +38,7 @@ def _beta_calibration(df, y, sample_weight=None):
         lr.fit(x, y, sample_weight)
         coefs = lr.coef_[0]
         a = coefs[0]
-        b = 0
+        b = None
     else:
         a = coefs[0]
         b = coefs[1]
@@ -112,9 +112,9 @@ class _BetaCal(BaseEstimator, RegressorMixin):
         x = np.hstack((df, 1. - df))
         x = np.log(x)
         x[:, 1] *= -1
-        if self.map_[0] == 0:
+        if self.map_[0] == None:
             x = x[:, 1].reshape(-1, 1)
-        elif self.map_[1] == 0:
+        elif self.map_[1] == None:
             x = x[:, 0].reshape(-1, 1)
 
         return self.lr_.predict_proba(x)[:, 1]
